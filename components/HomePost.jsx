@@ -1,16 +1,31 @@
-import React, { useState } from 'react'; 
+import React, { useState, useRef, useContext } from 'react'; 
 import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
+import { SessionContext } from '../utils/context'; 
 
 const HomePost = ({ post, onHide, isHidden }) => {
+    const { deletePost } = useContext(SessionContext); 
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(post.likes); 
     const [comment, setComment] = useState('');
     const [commentsList, setCommentsList] = useState(post.comments || []);
     const [showCommentInput, setShowCommentInput] = useState(false);
     const [menuVisible, setMenuVisible] = useState(false);
-    
+    const doubleTapRef = useRef(null);
+
     const handleDoubleTap = () => {
+        if (doubleTapRef.current) {
+            clearTimeout(doubleTapRef.current);
+            doubleTapRef.current = null;
+            toggleLike();
+        } else {
+            doubleTapRef.current = setTimeout(() => {
+                doubleTapRef.current = null;
+            }, 300);
+        }
+    };
+
+    const toggleLike = () => {
         setLiked(prevLiked => {
             if (prevLiked) {
                 setLikeCount(prevCount => prevCount - 1);
@@ -22,14 +37,7 @@ const HomePost = ({ post, onHide, isHidden }) => {
     };
 
     const handleHeartPress = () => {
-        setLiked(prevLiked => {
-            if (prevLiked) {
-                setLikeCount(prevCount => prevCount - 1);
-            } else {
-                setLikeCount(prevCount => prevCount + 1);
-            }
-            return !prevLiked;
-        });
+        toggleLike();
     };
 
     const handleCommentIconPress = () => {
@@ -57,6 +65,10 @@ const HomePost = ({ post, onHide, isHidden }) => {
 
     const handleHidePost = () => {
         if (onHide) onHide(post.id);
+    };
+
+    const handleDeletePost = () => {
+        deletePost(post.id); 
     };
 
     return (
@@ -91,6 +103,7 @@ const HomePost = ({ post, onHide, isHidden }) => {
                         <Text style={styles.likeCount}>{likeCount}</Text> 
                     </View>
                 </View>
+                <Text style={styles.descriptionText}>{post.description}</Text>
                 {showCommentInput && (
                     <>
                         <ScrollView style={styles.commentsContainer} nestedScrollEnabled={true}>
@@ -118,6 +131,10 @@ const HomePost = ({ post, onHide, isHidden }) => {
                         <TouchableOpacity onPress={handleHidePost} style={styles.menuItem}>
                             <Icon name="eye-off-outline" size={20} color="black" />
                             <Text style={styles.menuText}>Nascondi</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleDeletePost} style={styles.menuItem}>
+                            <Icon name="trash-outline" size={20} color="red" />
+                            <Text style={styles.menuText}>Elimina</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -190,6 +207,11 @@ const styles = StyleSheet.create({
     },
     likeCount: {
         marginLeft: 5,
+    },
+    descriptionText: {
+        marginTop: 10,
+        fontSize: 14,
+        color: '#333',
     },
     commentsContainer: {
         maxHeight: 100,

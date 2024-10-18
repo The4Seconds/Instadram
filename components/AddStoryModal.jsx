@@ -3,23 +3,35 @@ import ButtonStoryModal from "../components/ButtonStoryModal";
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from "react";
 import Input from "../components/InputStoryModal";
+import { useSessionContext } from "../utils/context";
 
 function AddStoryModal() {
     const [img, setImg] = useState(null);
     const [description, setDescription] = useState('');
+    const value = useSessionContext();
 
     function deleteImage() {
         setImg(null);
     }
 
     function publishPost() {
-        console.log('Pubblica');
-        const post = {
-            name: "Il Papa",
-            image: img,
-            description: description
-        };
-        console.log(post);
+        if (img) {
+            const post = {
+                id: Date.now(),
+                username: 'Pc_Store',
+                image: require('../assets/images.jpg'),
+                postImage: { uri: img },
+                description: description,
+                likes: 20,
+                comments: []
+            };
+            
+            value.addPost(post);
+            deleteImage();
+            setDescription('');
+        } else {
+            alert("Devi scattare una foto prima di pubblicare!");
+        }
     }
 
     async function openCamera() {
@@ -29,37 +41,25 @@ function AddStoryModal() {
             return;
         }
 
-        console.log('OPEN CAMERA!');
         const result = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
             quality: 1
         });
+        
         if (!result.canceled) {
             const image = result.assets[0].uri;
             setImg(image);
         }
     }
 
-    const containerStyle = {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-    };
-
-    const imageContainerStyle = {
-        width: 400,
-        height: 400,
-        backgroundColor: 'red',
-    };
-
     return (
-        <View style={containerStyle}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
             {!img && (
                 <ButtonStoryModal title={'Apri fotocamera'} onPress={openCamera} />
             )}
             {!!img && (
                 <View>
-                    <View style={imageContainerStyle}>
+                    <View style={{ width: 400, height: 400, backgroundColor: 'red' }}>
                         <Image
                             source={{ uri: img }}
                             style={{ width: '100%', height: '100%' }} 
@@ -68,6 +68,7 @@ function AddStoryModal() {
                     <View style={styles.inputContainer}>
                         <Input
                             placeholder="Descrizione"
+                            value={description}
                             onChange={setDescription}
                             style={styles.input}
                         />

@@ -34,6 +34,11 @@ function Home() {
         }));
     };
 
+    const handleResetPosts = async () => {
+        await value.resetPosts();
+        setModalVisible(false); 
+    };
+
     return (
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <SquareContainer>
@@ -59,6 +64,10 @@ function Home() {
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.optionContainer}>
                                             <Text style={styles.optionText}>Preferiti</Text>
+                                            <Icon name="star-outline" size={20} color="black" />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={handleResetPosts} style={styles.optionContainer}>
+                                            <Text style={styles.optionText}>Reset Posts</Text>
                                             <Icon name="star-outline" size={20} color="black" />
                                         </TouchableOpacity>
                                     </View>
