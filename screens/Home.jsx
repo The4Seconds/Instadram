@@ -68,7 +68,7 @@ function Home() {
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={handleResetPosts} style={styles.optionContainer}>
                                             <Text style={styles.optionText}>Reset Posts</Text>
-                                            <Icon name="star-outline" size={20} color="black" />
+                                            <Icon name="refresh" size={20} color="black" />
                                         </TouchableOpacity>
                                     </View>
                                 </View>

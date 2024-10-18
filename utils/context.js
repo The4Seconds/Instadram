@@ -19,16 +19,16 @@ function SessionProvider({ children }) {
             postImage: require('../assets/macchina.jpg'),
             likes: 10,
             comments: [],
-            description: 'Un bel tramonto sul mare!',
+            description: 'Una Macchina Super!!',
         },
         {
             id: 2,
             username: 'Marco',
             image: require('../assets/bho2.png'),
-            postImage: require('../assets/immagine300.png'),
+            postImage: require('../assets/immagine901.jpg'),
             likes: 25,
             comments: [],
-            description: 'Una giornata in montagna',
+            description: 'Set Up bellissimo!',
         },
         {
             id: 3,
@@ -37,7 +37,7 @@ function SessionProvider({ children }) {
             postImage: require('../assets/immagine301.png'),
             likes: 18,
             comments: [],
-            description: 'Relax con un buon libro',
+            description: 'Relax con degli amici in una bella città xD',
         },
         {
             id: 4,
@@ -46,7 +46,7 @@ function SessionProvider({ children }) {
             postImage: require('../assets/immagine302.png'),
             likes: 34,
             comments: [],
-            description: 'Prima guida da solo!',
+            description: 'Una città notturna.',
         },
         {
             id: 5,
@@ -55,7 +55,7 @@ function SessionProvider({ children }) {
             postImage: require('../assets/immagine300.png'),
             likes: 22,
             comments: [],
-            description: 'Momenti felici con gli amici',
+            description: 'Una città indimenticabile...',
         },
     ];
 
